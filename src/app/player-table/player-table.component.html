@@ -1,0 +1,49 @@
+<mat-form-field>
+<mat-label>Search </mat-label>
+<input matInput (keyup)="applyFilter($event)" placeholder="Search here!">
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="first_name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
+    <td mat-cell *matCellDef="let row"> {{row.first_name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="last_name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </th>
+    <td mat-cell *matCellDef="let row"> {{row.last_name}} </td>
+    </ng-container> 
+
+    <ng-container matColumnDef="position">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Position </th>
+    <td mat-cell *matCellDef="let row"> {{row.position}} </td>
+    </ng-container> 
+
+    <ng-container matColumnDef="team">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Team </th>
+    <td mat-cell *matCellDef="let row"> {{row.team_name}} </td>
+    </ng-container> 
+
+    <ng-container matColumnDef="height">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Height </th>
+    <td mat-cell *matCellDef="let row"><div *ngIf="row.height_ft"> {{row.height_ft}}'{{row.height_in}}" </div></td>
+    </ng-container> 
+
+    <ng-container matColumnDef="weight">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Weight </th>
+    <td mat-cell *matCellDef="let row"><div *ngIf="row.height_ft"> {{row.weight}}lbs </div></td>
+    </ng-container> 
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" routerLink="/detail/{{row.id}}">
+    </tr>
+    </table>
+
+    <mat-paginator [length]="100"
+                [pageSize]="10"
+                [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
+
+</div>

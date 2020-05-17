@@ -1,0 +1,18 @@
+<div *ngIf="player">
+    <h2>{{player.first_name}} {{player.last_name}}</h2>
+    <ul>
+        <li>ID: {{player.id}}</li>
+        <li>Position: {{player.position}}</li>
+        <li *ngIf="player.height_ft">Height: {{player.height_ft}}'{{player.height_in}}"</li>
+        <li *ngIf="player.weight">Weight: {{player.weight}}lbs</li>
+        <li>Team Details:<ul>
+             <li>Name: {{player.team_name}}</li>
+             <li>Abbreviation: {{player.team_abbr}}</li>
+             <li>City: {{player.team_city}}</li>
+             <li>Conference: {{player.team_conf}}</li>
+             <li>Division: {{player.team_div}}</li>
+             <li>Full Name: {{player.team_full_name}}</li>
+        </ul></li>
+    </ul>
+</div>
+<button (click)="goBack()">go back</button>
