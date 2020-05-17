@@ -1,5 +1,7 @@
 # Eagle6BasketballViewer
 
+Hi, it's Caleb! This uses the free [balldontlie API](https://balldontlie.io).
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.1.
 
 ## Development server
