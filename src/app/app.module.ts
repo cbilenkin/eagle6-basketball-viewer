@@ -4,20 +4,22 @@ import { HttpClientModule } from "@angular/common/http";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PlayerTableComponent } from './player-table/player-table.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
+import { PlayerTableComponent } from './player-table/player-table.component';
 import { SinglePlayerComponent } from './single-player/single-player.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PlayerTableComponent,
-    SinglePlayerComponent,
+    SinglePlayerComponent
   ],
   imports: [
     BrowserModule,
@@ -29,6 +31,7 @@ import { SinglePlayerComponent } from './single-player/single-player.component';
     MatSortModule,
     MatFormFieldModule,
     MatInputModule,
+    MatProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent, PlayerTableComponent]

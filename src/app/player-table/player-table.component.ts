@@ -1,9 +1,9 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { Player } from "../player.model";
+import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import { Player } from "../models";
 import { PlayerService } from "../player.service";
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { merge, of as observableOf } from 'rxjs';
+import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-player-table',
@@ -11,17 +11,19 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./player-table.component.scss']
 })
 
-export class PlayerTableComponent implements OnInit {
+export class PlayerTableComponent implements AfterViewInit {
+  displayedColumns = ['first_name', 'last_name', 'position', 'team', 'height', 'weight'];
+  playerDatabase: PlayerService | null;
   players: Player[];
-  displayedColumns: string[] = ['first_name', 'last_name', 'position', 'team', 'height', 'weight'];
-  dataSource = new MatTableDataSource<Player>();
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  resultsLength = 0;
+  isLoadingResults = true;
+  isRateLimitReached = false;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private playerService: PlayerService) {
     this.players = [];
-    this.dataSource = new MatTableDataSource(this.players);
   }
 
   selectedPlayer: Player;
@@ -29,24 +31,38 @@ export class PlayerTableComponent implements OnInit {
     this.selectedPlayer = player;
   }
 
-  ngOnInit() {
-    this.playerService.list().subscribe((players: Player[]) => {
-      this.dataSource.data = players;
-      this.players = players;
-    });
-    this.dataSource.sort = this.sort;
+  ngAfterViewInit() {
+    this.getResults();
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+  getResults(search?: string) {
+    merge(this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          this.isLoadingResults = true;
+          return this.playerService.getPlayers(this.paginator.pageIndex + 1, search);
+        }),
+        map(returnedInfo => {
+          this.isLoadingResults = false;
+          this.isRateLimitReached = false;
+          this.resultsLength = returnedInfo.meta.total_count;
+
+          return returnedInfo.data;
+        }),
+        catchError(() => {
+          this.isLoadingResults = false;
+          this.isRateLimitReached = true;
+          return observableOf([]);
+        })
+      ).subscribe((players: Player[]) => {
+        this.players = players;
+      });
   }
 
   applyFilter(event: Event) {
+    this.paginator.pageIndex = 0;
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    this.getResults(filterValue);
   }
 }
