@@ -11,6 +11,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { PlayerTableComponent } from './player-table/player-table.component';
 import { SinglePlayerComponent } from './single-player/single-player.component';
@@ -31,7 +32,8 @@ import { SinglePlayerComponent } from './single-player/single-player.component';
     MatSortModule,
     MatFormFieldModule,
     MatInputModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    FlexLayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent, PlayerTableComponent]
